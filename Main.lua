@@ -4,70 +4,69 @@ if game.PlaceId == 142823291 then
 	local Players = game:GetService("Players")
 	local RunService = game:GetService("RunService")
 	local UserInputService = game:GetService("UserInputService")
-	
-	local Player = Players.LocalPlayer
-    
-    local CollectiblesManager = Instance.new("StringValue", workspace)
-    CollectiblesManager.Value = "None"
-    
-    local Speed = 19
-    
-    function CreateESPPart(BodyPart, color, CoinType)
-        local Box = Instance.new("BoxHandleAdornment", BodyPart)
-        Box.Size = BodyPart.Size + Vector3.new(0.1, 0.1, 0.1)
-        Box.Name = "ESPPart"
-        Box.Adornee = BodyPart
-        Box.Color3 = color
-        Box.AlwaysOnTop = true
-        Box.ZIndex = 10
-        
-        if Box and BodyPart and CoinType then
-            if CollectiblesManager.Value == "None" then
-                Box.Transparency = 1
-            elseif CollectiblesManager.Value == "All" then
-                Box.Transparency = .2
-            elseif CollectiblesManager.Value == "Hearts" then
-                if CoinType.Value == "Heart" then
-                    Box.Transparency = .2
-                else
-                    Box.Transparency = 1
-                end
-            elseif CollectiblesManager.Value == "Coins" then
-                if CoinType.Value == "Coin" then
-                    Box.Transparency = .2
-                else
-                    Box.Transparency = 1
-                end
-            end
-        end
-        
-        CollectiblesManager.Changed:Connect(function()
-            if Box and BodyPart and CoinType then
-                if CollectiblesManager.Value == "None" then
-                    Box.Transparency = 1
-                elseif CollectiblesManager.Value == "All" then
-                    Box.Transparency = .2
-                elseif CollectiblesManager.Value == "Hearts" then
-                    if CoinType.Value == "Heart" then
-                        Box.Transparency = .2
-                    else
-                        Box.Transparency = 1
-                    end
-                elseif CollectiblesManager.Value == "Coins" then
-                    if CoinType.Value == "Coin" then
-                        Box.Transparency = .2
-                    else
-                        Box.Transparency = 1
-                    end
-                end
-            end
-        end)
-    end
 
-	--Start of functions for buttons--
-	function Create(base, Color) --For all esps
+	local Player = Players.LocalPlayer
+
+	local CollectiblesManager = Instance.new("StringValue", workspace)
+	CollectiblesManager.Value = "None"
+
+	local Speed = 19
+
+	function CreateESPPart(BodyPart, color, CoinType)
+		local Box = Instance.new("BoxHandleAdornment", BodyPart)
+		Box.Size = BodyPart.Size + Vector3.new(0.1, 0.1, 0.1)
+		Box.Name = "ESPPart"
+		Box.Adornee = BodyPart
+		Box.Color3 = color
+		Box.AlwaysOnTop = true
+		Box.ZIndex = 10
+
+		if Box and BodyPart and CoinType then
+			if CollectiblesManager.Value == "None" then
+				Box.Transparency = 1
+			elseif CollectiblesManager.Value == "All" then
+				Box.Transparency = .2
+			elseif CollectiblesManager.Value == "Hearts" then
+				if CoinType.Value == "Heart" then
+					Box.Transparency = .2
+				else
+					Box.Transparency = 1
+				end
+			elseif CollectiblesManager.Value == "Coins" then
+				if CoinType.Value == "Coin" then
+					Box.Transparency = .2
+				else
+					Box.Transparency = 1
+				end
+			end
+		end
+
+		CollectiblesManager.Changed:Connect(function()
+			if Box and BodyPart and CoinType then
+				if CollectiblesManager.Value == "None" then
+					Box.Transparency = 1
+				elseif CollectiblesManager.Value == "All" then
+					Box.Transparency = .2
+				elseif CollectiblesManager.Value == "Hearts" then
+					if CoinType.Value == "Heart" then
+						Box.Transparency = .2
+					else
+						Box.Transparency = 1
+					end
+				elseif CollectiblesManager.Value == "Coins" then
+					if CoinType.Value == "Coin" then
+						Box.Transparency = .2
+					else
+						Box.Transparency = 1
+					end
+				end
+			end
+		end)
+	end
+
+	function Create(base, Color)
 		local bb
-		
+
 		if not base:FindFirstChild("ESP") then
 			bb = Instance.new("BillboardGui", base)
 			bb.Adornee = base
@@ -86,7 +85,7 @@ if game.PlaceId == 142823291 then
 			txtlbl.ZIndex = 10
 			txtlbl.Text = base.Parent.Name
 			if base.Name == "GunDrop" then
-			    txtlbl.Text = base.Name
+				txtlbl.Text = base.Name
 			end
 			txtlbl.BackgroundTransparency = 1
 			txtlbl.Position = UDim2.new(0,0,0,-35)
@@ -99,24 +98,24 @@ if game.PlaceId == 142823291 then
 			bb.TextLabel.TextColor3 = Color
 		end
 	end
-	
+
 	function ChangeSpeed(SpeedArg)
-	    if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
-    	    if not SpeedArg then
-    	        print(Speed)
-    	        Player.Character.Humanoid.WalkSpeed = Speed
-    	    else
-    	        Player.Character.Humanoid.WalkSpeed = SpeedArg
-    	    end
-        end
+		if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
+			if not SpeedArg then
+				print(Speed)
+				Player.Character.Humanoid.WalkSpeed = Speed
+			else
+				Player.Character.Humanoid.WalkSpeed = SpeedArg
+			end
+		end
 	end
 
 	function Check(v)
-	    if v and v.Name == "GunDrop" then
-	        Create(v, Color3.fromRGB(255, 255, 0))
-	        return
-	    end
-	    
+		if v and v.Name == "GunDrop" then
+			Create(v, Color3.fromRGB(255, 255, 0))
+			return
+		end
+
 		if v and v ~= Player and v.Character and v.Character:FindFirstChild("Head") then
 			if v.Character:FindFirstChildOfClass("Tool") then
 				if v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
@@ -142,24 +141,6 @@ if game.PlaceId == 142823291 then
 		end
 	end
 
-    --[[function TPTool()
-        if not Player.Backpack:FindFirstChild("Get Gun") and not Player.Character:FindFirstChild("Get Gun") then
-            local Tool = Instance.new("Tool", Player.Backpack)
-            Tool.Name = "Get Gun"
-            Tool.RequiresHandle = false
-            
-            Tool.Activated:Connect(function()
-                local OldPos = Player.Character.HumanoidRootPart.CFrame
-                
-                if workspace:FindFirstChild("GunDrop") then
-                    Player.Character.HumanoidRootPart.CFrame = workspace.GunDrop.CFrame + CFrame.new(0, 1, 0)
-                    wait(.2)
-                    Player.Character.HumanoidRootPart.CFrame = OldPos
-                end
-            end)
-        end
-    end]]
-
 	RunService.Stepped:Connect(function()
 		for _, v in pairs(Players:GetPlayers()) do
 			if v then
@@ -167,93 +148,99 @@ if game.PlaceId == 142823291 then
 			end
 		end
 
-        if workspace:FindFirstChild("GunDrop") and Player.Character then --and Player.Backpack and not Player.Backpack:FindFirstChild("Get Gun") and not Player.Character:FindFirstChild("Get Gun") then
-            Check(workspace:FindFirstChild("GunDrop"), Color3.fromRGB(255, 255, 0))
-        end
+		if workspace:FindFirstChild("GunDrop") and Player.Character then --and Player.Backpack and not Player.Backpack:FindFirstChild("Get Gun") and not Player.Character:FindFirstChild("Get Gun") then
+			Check(workspace:FindFirstChild("GunDrop"), Color3.fromRGB(255, 255, 0))
+		end
 	end)
-	
-	UserInputService.InputBegan:Connect(function(Input, Paused)
-		if Input.KeyCode == Enum.KeyCode.LeftControl and not Paused then
-		    if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
-			    ChangeSpeed()
-			    workspace.CurrentCamera.FieldOfView = 80
+
+	local CanRun = true
+	RunService.RenderStepped:Connect(function()
+	if CanRun then
+			CanRun = false
+			if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+				if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
+					ChangeSpeed()
+					workspace.CurrentCamera.FieldOfView = 80
+				end
 			end
+			wait(.1)
+			CanRun = true
 		end
 	end)
 
 	UserInputService.InputEnded:Connect(function(Input, Paused)
 		if Input.KeyCode == Enum.KeyCode.LeftControl and not Paused then
-		    if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
-			    ChangeSpeed(16)
-			    workspace.CurrentCamera.FieldOfView = 70
+			if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
+				ChangeSpeed(16)
+				workspace.CurrentCamera.FieldOfView = 70
 			end
 		end
 	end)
-	
+
 	UserInputService.InputEnded:Connect(function(Input, Paused)
 		if Input.KeyCode == Enum.KeyCode.T and not Paused then
-		    if CollectiblesManager.Value == "None" then
-			    CollectiblesManager.Value = "All"
-		    elseif CollectiblesManager.Value == "All" then
-		        CollectiblesManager.Value = "Hearts"
-		    elseif CollectiblesManager.Value == "Hearts" then
-		        CollectiblesManager.Value = "Coins"
-		    elseif CollectiblesManager.Value == "Coins" then
-		        CollectiblesManager.Value = "None"
+			if CollectiblesManager.Value == "None" then
+				CollectiblesManager.Value = "All"
+			elseif CollectiblesManager.Value == "All" then
+				CollectiblesManager.Value = "Hearts"
+			elseif CollectiblesManager.Value == "Hearts" then
+				CollectiblesManager.Value = "Coins"
+			elseif CollectiblesManager.Value == "Coins" then
+				CollectiblesManager.Value = "None"
 			end
 		end
 	end)
-	
+
 	local CanGrabGun = true
 	UserInputService.InputBegan:Connect(function(Input, Paused)
 		if Input.KeyCode == Enum.KeyCode.R and workspace:FindFirstChild("GunDrop") and Player.Character and Player.Character.HumanoidRootPart and not Paused and CanGrabGun then
-		    CanGrabGun = false
-		    
+			CanGrabGun = false
+
 			local OldPos = Player.Character.HumanoidRootPart.CFrame
-			
+
 			Player.Character.HumanoidRootPart.CFrame = workspace:FindFirstChild("GunDrop").CFrame
 			wait(.05)
 			Player.Character.Humanoid:MoveTo(OldPos)
 			wait(.23)
 			Player.Character.HumanoidRootPart.CFrame = OldPos
-			
+
 			CanGrabGun = true
 		end
 	end)
-	
+
 	workspace.DescendantAdded:Connect(function(v)
-	    wait(.075)
-	    if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
-    	    if v.CoinType.Value == "Heart" then
-    	        CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
-    	    elseif v.CoinType.Value == "Coin" and v.Coin:FindFirstChild("MainCoin") then
-    	        CreateESPPart(v.Coin["MainCoin"], Color3.fromRGB(239, 247, 72), v.CoinType)
-    	    end
-        end
+		wait(.075)
+		if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
+			if v.CoinType.Value == "Heart" then
+				CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
+			elseif v.CoinType.Value == "Coin" and v.Coin:FindFirstChild("MainCoin") then
+				CreateESPPart(v.Coin["MainCoin"], Color3.fromRGB(239, 247, 72), v.CoinType)
+			end
+		end
 	end)
-    
-    local Lag = false
-    UserInputService.InputBegan:Connect(function(Input, Paused)
+
+	local Lag = false
+	UserInputService.InputBegan:Connect(function(Input, Paused)
 		if Input.KeyCode == Enum.KeyCode.G and not Paused then
-		    Lag = not Lag
-		    
-		    if Lag then
-		        settings():GetService("NetworkSettings").IncomingReplicationLag = 9e9
-		    else
-		        settings():GetService("NetworkSettings").IncomingReplicationLag = 0
-		    end
-		end
-    end)
+			Lag = not Lag
 
-    UserInputService.InputEnded:Connect(function(Input, Paused)
-		if Input.KeyCode == Enum.KeyCode.Q and not Paused then
-		    Speed -= 1
+			if Lag then
+				settings():GetService("NetworkSettings").IncomingReplicationLag = 9e9
+			else
+				settings():GetService("NetworkSettings").IncomingReplicationLag = 0
+			end
 		end
-    end)
+	end)
 
-    UserInputService.InputEnded:Connect(function(Input, Paused)
-		if Input.KeyCode == Enum.KeyCode.E and not Paused then
-		    Speed += 1
+	UserInputService.InputEnded:Connect(function(Input, Paused)
+		if Input.KeyCode == Enum.KeyCode.B and not Paused then
+			Speed -= 1
+		end
+	end)
+
+	UserInputService.InputEnded:Connect(function(Input, Paused)
+		if Input.KeyCode == Enum.KeyCode.N and not Paused then
+			Speed += 1
 		end
 	end)
 end
