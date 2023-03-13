@@ -124,7 +124,12 @@ function Create(base, Color)
 		bb = base:FindFirstChild("ESP")
 		bb.TextLabel.TextColor3 = Color
 		
-		Highlight = base.Parent:FindFirstChild("Highlight")
+		if base.Name == "GunDrop" then
+            Highlight = base:FindFirstChild("Highlight")
+        else
+            Highlight = base.Parent:FindFirstChild("Highlight")
+        end
+		
 		Highlight.OutlineColor = Color
 		
 		if Outlines then
