@@ -200,7 +200,7 @@ if game.PlaceId == 142823291 then
 
 			Player.Character.HumanoidRootPart.CFrame = workspace:FindFirstChild("GunDrop").CFrame
 			wait(.05)
-			Player.Character.Humanoid:MoveTo(OldPos)
+			Player.Character.Humanoid:MoveTo(OldPos.Position)
 			wait(.23)
 			Player.Character.HumanoidRootPart.CFrame = OldPos
 
