@@ -99,6 +99,17 @@ if game.PlaceId == 142823291 then
 			bb.TextLabel.TextColor3 = Color
 		end
 	end
+	
+	function ChangeSpeed(SpeedArg)
+	    if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
+    	    if not SpeedArg then
+    	        print(Speed)
+    	        Player.Character.Humanoid.WalkSpeed = Speed
+    	    else
+    	        Player.Character.Humanoid.WalkSpeed = SpeedArg
+    	    end
+        end
+	end
 
 	function Check(v)
 	    if v and v.Name == "GunDrop" then
@@ -164,7 +175,7 @@ if game.PlaceId == 142823291 then
 	UserInputService.InputBegan:Connect(function(Input, Paused)
 		if Input.KeyCode == Enum.KeyCode.LeftControl and not Paused then
 		    if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
-			    Player.Character.Humanoid.WalkSpeed = Speed
+			    ChangeSpeed()
 			    workspace.CurrentCamera.FieldOfView = 80
 			end
 		end
@@ -173,7 +184,7 @@ if game.PlaceId == 142823291 then
 	UserInputService.InputEnded:Connect(function(Input, Paused)
 		if Input.KeyCode == Enum.KeyCode.LeftControl and not Paused then
 		    if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
-			    Player.Character.Humanoid.WalkSpeed = 16
+			    ChangeSpeed(16)
 			    workspace.CurrentCamera.FieldOfView = 70
 			end
 		end
@@ -235,13 +246,13 @@ if game.PlaceId == 142823291 then
     end)
 
     UserInputService.InputEnded:Connect(function(Input, Paused)
-		if Input.KeyCode == Enum.KeyCode.B and not Paused then
+		if Input.KeyCode == Enum.KeyCode.Q and not Paused then
 		    Speed -= 1
 		end
     end)
 
     UserInputService.InputEnded:Connect(function(Input, Paused)
-		if Input.KeyCode == Enum.KeyCode.N and not Paused then
+		if Input.KeyCode == Enum.KeyCode.E and not Paused then
 		    Speed += 1
 		end
 	end)
