@@ -233,13 +233,13 @@ if game.PlaceId == 142823291 then
 	end)
 
 	UserInputService.InputEnded:Connect(function(Input, Paused)
-		if Input.KeyCode == Enum.KeyCode.B and not Paused then
+		if Input.KeyCode == Enum.KeyCode.Q and not Paused then
 			Speed -= 1
 		end
 	end)
 
 	UserInputService.InputEnded:Connect(function(Input, Paused)
-		if Input.KeyCode == Enum.KeyCode.N and not Paused then
+		if Input.KeyCode == Enum.KeyCode.E and not Paused then
 			Speed += 1
 		end
 	end)
