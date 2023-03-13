@@ -158,27 +158,37 @@ function Check(v)
 		Create(v, Color3.fromRGB(255, 255, 0))
 		return
 	end
+	
+	local InnocentColor = Color3.fromRGB(0, 255, 0)
+	local SheriffColor = Color3.fromRGB(0, 0, 255)
+	local MurdererColor = Color3.fromRGB(255, 0, 0)
+	
+	if v:IsFriendsWith(Player.UserId) then
+	    InnocentColor = Color3.fromRGB(255, 255, 0)
+    	SheriffColor = Color3.fromRGB(0, 255, 255)
+    	MurdererColor = Color3.fromRGB(255, 0, 255)
+	end
 
 	if v and v ~= Player and v.Character and v.Character:FindFirstChild("Head") then
 		if v.Character:FindFirstChildOfClass("Tool") then
 			if v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
-				Create(v.Character:FindFirstChild("Head"), Color3.fromRGB(0, 0, 255))
+				Create(v.Character:FindFirstChild("Head"), SheriffColor)
 			elseif v.Character:FindFirstChildOfClass("Tool").Name == "Knife" then
-				Create(v.Character:FindFirstChild("Head"), Color3.fromRGB(255, 0, 0))
+				Create(v.Character:FindFirstChild("Head"), MurdererColor)
 			end
 
 			if not v.Character:FindFirstChild("Gun") and not v.Character:FindFirstChild("Knife") then
-				Create(v.Character:FindFirstChild("Head"), Color3.fromRGB(0, 255, 0))
+				Create(v.Character:FindFirstChild("Head"), InnocentColor)
 			end
 		elseif v.Backpack:FindFirstChildOfClass("Tool") then
 			if v.Backpack:FindFirstChildOfClass("Tool").Name == "Gun" then
-				Create(v.Character:FindFirstChild("Head"), Color3.fromRGB(0, 0, 255))
+				Create(v.Character:FindFirstChild("Head"), SheriffColor)
 			elseif v.Backpack:FindFirstChildOfClass("Tool").Name == "Knife" then
-				Create(v.Character:FindFirstChild("Head"), Color3.fromRGB(255, 0, 0))
+				Create(v.Character:FindFirstChild("Head"), MurdererColor)
 			end
 
 			if not v.Backpack:FindFirstChild("Gun") and not v.Backpack:FindFirstChild("Knife") then
-				Create(v.Character:FindFirstChild("Head"), Color3.fromRGB(0, 255, 0))
+				Create(v.Character:FindFirstChild("Head"), InnocentColor)
 			end
 		end
 	end
@@ -216,7 +226,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.LeftControl and not Paused then
+	if Input.KeyCode == Enum.KeyCode.LeftControl then
 		if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 			ChangeSpeed(16)
 			workspace.CurrentCamera.FieldOfView = 70
