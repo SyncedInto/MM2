@@ -169,7 +169,7 @@ function Check(v)
     	MurdererColor = Color3.fromRGB(255, 0, 255)
 	end
 
-	if v and v ~= Player and v.Character and v.Character:FindFirstChild("Head") then
+	if v and v ~= Player and v.Backpack and v.Character and v.Character:FindFirstChild("Head") then
 		if v.Character:FindFirstChildOfClass("Tool") then
 			if v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
