@@ -13,7 +13,6 @@ if game.PlaceId == 142823291 then
     local Speed = 19
     
     function CreateESPPart(BodyPart, color, CoinType)
-        print("Yay")
         local Box = Instance.new("BoxHandleAdornment", BodyPart)
         Box.Size = BodyPart.Size + Vector3.new(0.1, 0.1, 0.1)
         Box.Name = "ESPPart"
