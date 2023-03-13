@@ -11,6 +11,7 @@ if game.PlaceId == 142823291 then
 	CollectiblesManager.Value = "None"
 
 	local Speed = 19
+	local Outlines = true
 
 	function CreateESPPart(BodyPart, color, CoinType)
 		local Box = Instance.new("BoxHandleAdornment", BodyPart)
@@ -68,43 +69,57 @@ if game.PlaceId == 142823291 then
 		local bb
 		local Highlight
 
-		if not base:FindFirstChild("ESP") and not base.Parent:FindFirstChild("Highlight") then
-		    Highlight = Instance.new("Highlight", base.Parent)
-		    Highlight.FillTransparency = 1
-		    Highlight.OutlineColor = Color
-		    
-			bb = Instance.new("BillboardGui", base)
-			bb.Adornee = base
-			bb.ExtentsOffset = Vector3.new(0,1,0)
-			bb.AlwaysOnTop = true
-			bb.Size = UDim2.new(0,5,0,5)
-			bb.StudsOffset = Vector3.new(0,1,0)
-			--bb.TextLabel.TextColor3 = Color
-			bb.Name = "ESP"
-
-			local frame = Instance.new("Frame", bb)
-			frame.ZIndex = 10
-			frame.BackgroundTransparency = 0.3
-			frame.Size = UDim2.new(1,0,1,0)
-			local txtlbl = Instance.new("TextLabel",bb)
-			txtlbl.ZIndex = 10
-			txtlbl.Text = base.Parent.Name
-			if base.Name == "GunDrop" then
-				txtlbl.Text = base.Name
-				Highlight.OutlineTransparency = 1
-			end
-			txtlbl.BackgroundTransparency = 1
-			txtlbl.Position = UDim2.new(0,0,0,-35)
-			txtlbl.Size = UDim2.new(1,0,10,0)
-			txtlbl.Font = "ArialBold"
-			txtlbl.FontSize = "Size12"
-			txtlbl.TextStrokeTransparency = 0.5
+		if not base:FindFirstChild("ESP") then
+		    if not base.Parent:FindFirstChild("Highlight") or not base:FindFirstChild("Highlight") then
+		        if base.Name == "GunDrop" then
+		            parent = base
+		        else
+		            parent = base.Parent
+		        end
+		        
+    		    Highlight = Instance.new("Highlight", parent)
+    		    Highlight.FillTransparency = 1
+    		    Highlight.OutlineColor = Color
+    		    
+    			bb = Instance.new("BillboardGui", base)
+    			bb.Adornee = base
+    			bb.ExtentsOffset = Vector3.new(0,1,0)
+    			bb.AlwaysOnTop = true
+    			bb.Size = UDim2.new(0,5,0,5)
+    			bb.StudsOffset = Vector3.new(0,1,0)
+    			--bb.TextLabel.TextColor3 = Color
+    			bb.Name = "ESP"
+    
+    			local frame = Instance.new("Frame", bb)
+    			frame.ZIndex = 10
+    			frame.BackgroundTransparency = 0.3
+    			frame.Size = UDim2.new(1,0,1,0)
+    			local txtlbl = Instance.new("TextLabel",bb)
+    			txtlbl.ZIndex = 10
+    			txtlbl.Text = base.Parent.Name
+    			if base.Name == "GunDrop" then
+    				txtlbl.Text = base.Name
+    				--Highlight.OutlineTransparency = 1
+    			end
+    			txtlbl.BackgroundTransparency = 1
+    			txtlbl.Position = UDim2.new(0,0,0,-35)
+    			txtlbl.Size = UDim2.new(1,0,10,0)
+    			txtlbl.Font = "ArialBold"
+    			txtlbl.FontSize = "Size12"
+    			txtlbl.TextStrokeTransparency = 0.5
+    		end
 		else
 			bb = base:FindFirstChild("ESP")
 			bb.TextLabel.TextColor3 = Color
 			
 			Highlight = base.Parent:FindFirstChild("Highlight")
 			Highlight.OutlineColor = Color
+			
+			if Outlines then
+			    Highlight.OutlineTransparency = 0
+			else
+			    Highlight.OutlineTransparency = 1
+			end
 		end
 	end
 
@@ -250,6 +265,12 @@ if game.PlaceId == 142823291 then
 	UserInputService.InputEnded:Connect(function(Input, Paused)
 		if Input.KeyCode == Enum.KeyCode.E and not Paused then
 			Speed += 1
+		end
+	end)
+	
+	UserInputService.InputEnded:Connect(function(Input, Paused)
+		if Input.KeyCode == Enum.KeyCode.X and not Paused then
+			Outlines = not Outlines
 		end
 	end)
 end
