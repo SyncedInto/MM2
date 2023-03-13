@@ -25,6 +25,122 @@ local Speed = 19
 local Outlines = true
 local ESP = true
 
+local Keys = {
+    ["Nametags"] = Enum.KeyCode.Z,
+    ["Outlines"] = Enum.KeyCode.X,
+    ["Run"] = Enum.KeyCode.LeftControl,
+    ["Speed Up"] = Enum.KeyCode.E,
+    ["Speed Down"] = Enum.KeyCode.Q,
+    ["TP to gun"] = Enum.KeyCode.R,
+    ["Lag"] = Enum.KeyCode.G,
+    ["Coins ESP"] = Enum.KeyCode.T,
+}
+
+local Finity = loadstring(game:HttpGet("https://pastebin.com/raw/DMfEDWTE"))()
+local FinityWindow = Finity.new(true, "MM2", true)
+
+local KeyBind = FinityWindow:Category("Keybinds")
+local Credits = FinityWindow:Category("Credits")
+local Sector = KeyBind:Sector("Keybinds")
+local CreditsSector = Credits:Sector("Credits")
+
+--
+
+Sector:Cheat(
+	"Keybind",
+	"Nametags",
+	function(NewValue)
+		Keys.Nametags = NewValue
+	end,
+	{bind = Keys.Nametags}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Outlines",
+	function(NewValue)
+		Keys.Outlines = NewValue
+	end,
+	{bind = Keys.Outlines}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Run",
+	function(NewValue)
+		Keys.Run = NewValue
+	end,
+	{bind = Keys.Run}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Speed",
+	function(NewValue)
+		Keys.Speed = NewValue
+	end,
+	{bind = Keys.Speed}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Speed Up",
+	function(NewValue)
+		Keys["Speed Up"] = NewValue
+	end,
+	{bind = Keys["Speed Up"]}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Speed Down",
+	function(NewValue)
+		Keys["Speed Down"] = NewValue
+	end,
+	{bind = Keys["Speed Down"]}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"TP to gun",
+	function(NewValue)
+		Keys["TP to gun"] = NewValue
+	end,
+	{bind = Keys["TP to gun"]}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Lag",
+	function(NewValue)
+		Keys.Lag = NewValue
+	end,
+	{bind = Keys.Lag}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Coins ESP",
+	function(NewValue)
+		Keys["Coins ESP"] = NewValue
+	end,
+	{bind = Keys["Coins ESP"]}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Popup Menu",
+	function(NewValue)
+		FinityWindow.ChangeToggleKey(NewValue)
+	end,
+	{bind = Enum.KeyCode.RightControl}
+)
+
+CreditsSector:Cheat(
+    "Label",
+    "Special thanks to nat for being such an amazing wife <3"
+)
+
 function CreateESPPart(BodyPart, color, CoinType)
 	local Box = Instance.new("BoxHandleAdornment", BodyPart)
 	Box.Size = BodyPart.Size + Vector3.new(0.1, 0.1, 0.1)
@@ -170,24 +286,24 @@ function Check(v)
 	end
 
 	if v and v ~= Player and v.Backpack and v.Character and v.Character:FindFirstChild("Head") then
-		if v.Character:FindFirstChildOfClass("Tool") then
-			if v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
+		if v.Backpack and v.Character:FindFirstChildOfClass("Tool") then
+			if v.Backpack and v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
-			elseif v.Character:FindFirstChildOfClass("Tool").Name == "Knife" then
+			elseif v.Backpack and v.Character:FindFirstChildOfClass("Tool").Name == "Knife" then
 				Create(v.Character:FindFirstChild("Head"), MurdererColor)
 			end
 
-			if not v.Character:FindFirstChild("Gun") and not v.Character:FindFirstChild("Knife") then
+			if v.Backpack and not v.Character:FindFirstChild("Gun") and not v.Character:FindFirstChild("Knife") then
 				Create(v.Character:FindFirstChild("Head"), InnocentColor)
 			end
-		elseif v.Backpack:FindFirstChildOfClass("Tool") then
-			if v.Backpack:FindFirstChildOfClass("Tool").Name == "Gun" then
+		elseif v.Backpack and v.Backpack:FindFirstChildOfClass("Tool") then
+			if v.Backpack and v.Backpack:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
-			elseif v.Backpack:FindFirstChildOfClass("Tool").Name == "Knife" then
+			elseif v.Backpack and v.Backpack:FindFirstChildOfClass("Tool").Name == "Knife" then
 				Create(v.Character:FindFirstChild("Head"), MurdererColor)
 			end
 
-			if not v.Backpack:FindFirstChild("Gun") and not v.Backpack:FindFirstChild("Knife") then
+			if v.Backpack and not v.Backpack:FindFirstChild("Gun") and not v.Backpack:FindFirstChild("Knife") then
 				Create(v.Character:FindFirstChild("Head"), InnocentColor)
 			end
 		end
@@ -214,7 +330,7 @@ local CanRun = true
 RunService.RenderStepped:Connect(function()
 	if CanRun then
 		CanRun = false
-		if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+		if UserInputService:IsKeyDown(Keys.Run) then
 			if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 				ChangeSpeed()
 				workspace.CurrentCamera.FieldOfView = 80
@@ -226,7 +342,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.LeftControl then
+	if Input.KeyCode == Keys.Run then
 		if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 			ChangeSpeed(16)
 			workspace.CurrentCamera.FieldOfView = 70
@@ -235,7 +351,7 @@ UserInputService.InputEnded:Connect(function(Input, Paused)
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.T and not Paused then
+	if Input.KeyCode == Keys["Coins ESP"] and not Paused then
 		if CollectiblesManager.Value == "None" then
 			CollectiblesManager.Value = "All"
 		elseif CollectiblesManager.Value == "All" then
@@ -250,7 +366,7 @@ end)
 
 local CanGrabGun = true
 UserInputService.InputBegan:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.R and workspace:FindFirstChild("GunDrop") and Player.Character and Player.Character.HumanoidRootPart and not Paused and CanGrabGun then
+	if Input.KeyCode == Keys["TP to gun"] and workspace:FindFirstChild("GunDrop") and Player.Character and Player.Character.HumanoidRootPart and not Paused and CanGrabGun then
 		CanGrabGun = false
 
 		local OldPos = Player.Character.HumanoidRootPart.CFrame
@@ -278,7 +394,7 @@ end)
 
 local Lag = false
 UserInputService.InputBegan:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.G and not Paused then
+	if Input.KeyCode == Keys.Lag and not Paused then
 		Lag = not Lag
 
 		if Lag then
@@ -290,25 +406,25 @@ UserInputService.InputBegan:Connect(function(Input, Paused)
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.Q and not Paused then
+	if Input.KeyCode == Keys["Speed Up"] and not Paused then
 		Speed -= 1
 	end
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.E and not Paused then
+	if Input.KeyCode == Keys["Speed Down"] and not Paused then
 		Speed += 1
 	end
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.X and not Paused then
+	if Input.KeyCode == Keys.Outlines and not Paused then
 		Outlines = not Outlines
 	end
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
-	if Input.KeyCode == Enum.KeyCode.Z and not Paused then
+	if Input.KeyCode == Keys.Nametags and not Paused then
 		ESP = not ESP
 	end
 end)
