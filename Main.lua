@@ -66,8 +66,13 @@ if game.PlaceId == 142823291 then
 
 	function Create(base, Color)
 		local bb
+		local Highlight
 
-		if not base:FindFirstChild("ESP") then
+		if not base:FindFirstChild("ESP") and not base.Parent:FindFirstChild("Highlight") then
+		    Highlight = Instance.new("Highlight", base.Parent)
+		    Highlight.FillTransparency = 1
+		    Highlight.OutlineColor = Color
+		    
 			bb = Instance.new("BillboardGui", base)
 			bb.Adornee = base
 			bb.ExtentsOffset = Vector3.new(0,1,0)
@@ -86,6 +91,7 @@ if game.PlaceId == 142823291 then
 			txtlbl.Text = base.Parent.Name
 			if base.Name == "GunDrop" then
 				txtlbl.Text = base.Name
+				Highlight.OutlineTransparency = 1
 			end
 			txtlbl.BackgroundTransparency = 1
 			txtlbl.Position = UDim2.new(0,0,0,-35)
@@ -96,6 +102,9 @@ if game.PlaceId == 142823291 then
 		else
 			bb = base:FindFirstChild("ESP")
 			bb.TextLabel.TextColor3 = Color
+			
+			Highlight = base.Parent:FindFirstChild("Highlight")
+			Highlight.OutlineColor = Color
 		end
 	end
 
@@ -155,7 +164,7 @@ if game.PlaceId == 142823291 then
 
 	local CanRun = true
 	RunService.RenderStepped:Connect(function()
-	if CanRun then
+		if CanRun then
 			CanRun = false
 			if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
 				if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
