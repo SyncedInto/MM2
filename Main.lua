@@ -15,7 +15,7 @@ CollectiblesManager.Value = "None"
 
 local SavingBase = Instance.new("Part", workspace)
 SavingBase.Size = Vector3.new(30, 3, 30)
-SavingBase.Position = Vector3.new(490, -83, 2452)
+SavingBase.Position = Vector3.new(490, -70, 2452)
 SavingBase.Anchored = true
 SavingBase.Material = Enum.Material.SmoothPlastic
 SavingBase.Transparency = .6
@@ -23,6 +23,7 @@ SavingBase.CastShadow = false
 
 local Speed = 19
 local Outlines = true
+local ESP = true
 
 function CreateESPPart(BodyPart, color, CoinType)
 	local Box = Instance.new("BoxHandleAdornment", BodyPart)
@@ -131,6 +132,8 @@ function Create(base, Color)
 		else
 		    Highlight.OutlineTransparency = 1
 		end
+		
+		bb.Enabled = ESP
 	end
 end
 
@@ -188,7 +191,7 @@ RunService.Stepped:Connect(function()
 	end
 	
 	if Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-	    SavingBase.Position = Vector3.new(Player.Character.HumanoidRootPart.Position.X, -83, Player.Character.HumanoidRootPart.Position.Z)
+	    SavingBase.Position = Vector3.new(Player.Character.HumanoidRootPart.Position.X, -70, Player.Character.HumanoidRootPart.Position.Z)
 	end
 end)
 
@@ -286,5 +289,11 @@ end)
 UserInputService.InputEnded:Connect(function(Input, Paused)
 	if Input.KeyCode == Enum.KeyCode.X and not Paused then
 		Outlines = not Outlines
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(Input, Paused)
+	if Input.KeyCode == Enum.KeyCode.Z and not Paused then
+		ESP = not ESP
 	end
 end)
