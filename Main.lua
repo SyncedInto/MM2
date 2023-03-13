@@ -9,6 +9,14 @@ if game.PlaceId == 142823291 then
 
 	local CollectiblesManager = Instance.new("StringValue", workspace)
 	CollectiblesManager.Value = "None"
+	
+	local SavingBase = Instance.new("Part", workspace)
+	SavingBase.Size = Vector3.new(30, 3, 30)
+	SavingBase.Position = Vector3.new(490, -83, 2452)
+    SavingBase.Anchored = true
+    SavingBase.Material = Enum.Material.SmoothPlastic
+    SavingBase.Transparency = .6
+    SavingBase.CastShadow = false
 
 	local Speed = 19
 	local Outlines = true
@@ -174,6 +182,10 @@ if game.PlaceId == 142823291 then
 
 		if workspace:FindFirstChild("GunDrop") and Player.Character then --and Player.Backpack and not Player.Backpack:FindFirstChild("Get Gun") and not Player.Character:FindFirstChild("Get Gun") then
 			Check(workspace:FindFirstChild("GunDrop"), Color3.fromRGB(255, 255, 0))
+		end
+		
+		if Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+		    SavingBase.Position = Vector3.new(Player.Character.HumanoidRootPart.Position.X, -83, Player.Character.HumanoidRootPart.Position.Z)
 		end
 	end)
 
