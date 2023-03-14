@@ -179,7 +179,7 @@ function Check(v)
 	local SheriffColor = Color3.fromRGB(0, 0, 255)
 	local MurdererColor = Color3.fromRGB(255, 0, 0)
 	
-	if v:IsFriendsWith(Player.UserId) then
+	if v and v:IsFriendsWith(Player.UserId) then
 	    InnocentColor = Color3.fromRGB(255, 255, 0)
     	SheriffColor = Color3.fromRGB(0, 255, 255)
     	MurdererColor = Color3.fromRGB(255, 0, 255)
@@ -307,13 +307,13 @@ end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Speed Up"] and not Paused then
-		Speed -= 1
+		Speed += 1
 	end
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Speed Down"] and not Paused then
-		Speed += 1
+		Speed -= 1
 	end
 end)
 
