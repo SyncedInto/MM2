@@ -36,10 +36,110 @@ local Keys = {
     ["Coins ESP"] = Enum.KeyCode.T,
 }
 
---[[CreditsSector:Cheat(
+local Finity = loadstring(game:HttpGet("https://pastebin.com/raw/DMfEDWTE"))()
+local FinityWindow = Finity.new(true, "MM2", true)
+
+local KeyBind = FinityWindow:Category("Keybinds")
+local Credits = FinityWindow:Category("Credits")
+local Sector = KeyBind:Sector("Keybinds")
+local CreditsSector = Credits:Sector("Credits")
+
+--
+
+Sector:Cheat(
+	"Keybind",
+	"Nametags",
+	function(NewValue)
+		Keys.Nametags = NewValue
+	end,
+	{bind = Keys.Nametags}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Outlines",
+	function(NewValue)
+		Keys.Outlines = NewValue
+	end,
+	{bind = Keys.Outlines}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Run",
+	function(NewValue)
+		Keys.Run = NewValue
+	end,
+	{bind = Keys.Run}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Speed",
+	function(NewValue)
+		Keys.Speed = NewValue
+	end,
+	{bind = Keys.Speed}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Speed Up",
+	function(NewValue)
+		Keys["Speed Up"] = NewValue
+	end,
+	{bind = Keys["Speed Up"]}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Speed Down",
+	function(NewValue)
+		Keys["Speed Down"] = NewValue
+	end,
+	{bind = Keys["Speed Down"]}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"TP to gun",
+	function(NewValue)
+		Keys["TP to gun"] = NewValue
+	end,
+	{bind = Keys["TP to gun"]}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Lag",
+	function(NewValue)
+		Keys.Lag = NewValue
+	end,
+	{bind = Keys.Lag}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Coins ESP",
+	function(NewValue)
+		Keys["Coins ESP"] = NewValue
+	end,
+	{bind = Keys["Coins ESP"]}
+)
+
+Sector:Cheat(
+	"Keybind",
+	"Popup Menu",
+	function(NewValue)
+		FinityWindow.ChangeToggleKey(NewValue)
+	end,
+	{bind = Enum.KeyCode.RightControl}
+)
+
+CreditsSector:Cheat(
     "Label",
     "Special thanks to nat for being such an amazing wife <3"
-)]]
+)
 
 function CreateESPPart(BodyPart, color, CoinType)
 	local Box = Instance.new("BoxHandleAdornment", BodyPart)
