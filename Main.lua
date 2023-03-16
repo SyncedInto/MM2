@@ -166,7 +166,7 @@ SectorConfig:Cheat(
 		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Coin" then
 		            local ObjValue = Instance.new("ObjectValue", v.TouchInterest)
 		            ObjValue.Name = "Coin"
-    		        ObjectValue.Value = v
+    		        ObjValue.Value = v
     		        
     		        v.TouchInterest.Parent = TouchFolder
     		        v.Coin.Transparency = 1
@@ -196,7 +196,7 @@ SectorConfig:Cheat(
 		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Heart" then
 		            local ObjValue = Instance.new("ObjectValue", v.TouchInterest)
 		            ObjValue.Name = "Heart"
-    		        ObjectValue.Value = v
+    		        ObjValue.Value = v
     		        
     		        v.TouchInterest.Parent = TouchFolder
     		        v.Coin.Transparency = 1
@@ -466,7 +466,7 @@ workspace.DescendantAdded:Connect(function(v)
 		    if DeletingHearts then
 		        local ObjValue = Instance.new("ObjectValue", v.TouchInterest)
 		        ObjValue.Name = "Coin"
-		        ObjectValue.Value = v
+		        ObjValue.Value = v
 		        
 		        v.TouchInterest.Parent = TouchFolder
 		        v.Coin.Transparency = 1
@@ -477,7 +477,7 @@ workspace.DescendantAdded:Connect(function(v)
 		    if DeletingCoins then
 		        local ObjValue = Instance.new("ObjectValue", v.TouchInterest)
 		        ObjValue.Name = "Heart"
-		        ObjectValue.Value = v
+		        ObjValue.Value = v
 		        
 		        v.TouchInterest.Parent = TouchFolder
 		        v.Coin.Transparency = 1
