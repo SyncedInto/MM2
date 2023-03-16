@@ -1,4 +1,4 @@
-wait(10)
+wait(1)
 
 if game.PlaceId ~= 142823291 then
     return
@@ -187,6 +187,18 @@ SectorConfig:Cheat(
 		    DeletingHearts = false
 		end
 	end
+)
+
+local CanChangeFov = true
+SectorConfig:Cheat(
+	"Toggle",
+	"Change FOV when running",
+	function(Value)
+		if Value then
+            CanChangeFov = Value
+		end
+	end,
+	{enabled = true}
 )
 
 CreditsSector:Cheat(
@@ -386,7 +398,10 @@ RunService.RenderStepped:Connect(function()
 		if UserInputService:IsKeyDown(Keys.Run) then
 			if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 				ChangeSpeed()
-				workspace.CurrentCamera.FieldOfView = 80
+				
+				if CanChangeFov then
+				    workspace.CurrentCamera.FieldOfView = 80
+				end
 			end
 		end
 		wait(.1)
