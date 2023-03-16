@@ -159,6 +159,12 @@ SectorConfig:Cheat(
 	function(Value)
 		if Value then
 		    DeletingCoins = true
+		    
+		    for _, v in pairs(workspace:GetDescendants()) do
+		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Coin" then
+		            v:Destroy()
+		        end
+		    end
 		else
 		    DeletingCoins = false
 		end
@@ -171,6 +177,12 @@ SectorConfig:Cheat(
 	function(Value)
 		if Value then
 		    DeletingHearts = true
+		    
+		    for _, v in pairs(workspace:GetDescendants()) do
+		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Heart" then
+		            v:Destroy()
+		        end
+		    end
 		else
 		    DeletingHearts = false
 		end
@@ -423,7 +435,7 @@ UserInputService.InputBegan:Connect(function(Input, Paused)
 end)
 
 workspace.DescendantAdded:Connect(function(v)
-	wait(.075)
+	wait(.05)
 	
 	if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
 		if v.CoinType.Value == "Heart" then
@@ -432,7 +444,7 @@ workspace.DescendantAdded:Connect(function(v)
 		        return
 		    end
 			CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
-		elseif v.CoinType.Value == "Coin" and v.Coin:FindFirstChild("MainCoin") then
+		elseif v.CoinType.Value == "Coin" then
 		    if DeletingCoins then
 		        v:Destroy()
 		        return
