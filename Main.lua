@@ -45,6 +45,9 @@ local Sector = KeyBind:Sector("Keybinds")
 local SectorConfig = KeyBind:Sector("Configurations")
 local CreditsSector = Credits:Sector("Credits")
 
+local DeletingHearts = false
+local DeletingCoins = false
+
 --
 
 Sector:Cheat(
@@ -142,11 +145,37 @@ SectorConfig:Cheat(
 	"Speed",
 	function(Value)
 		Speed = Value
-	end, {
+	end,
+	{
 		min = 0,
 		max = 100,
 		suffix = " Speed"
-	})
+	}
+)
+	
+SectorConfig:Cheat(
+	"Toggle",
+	"Delete Coins",
+	function(Value)
+		if Value then
+		    DeletingCoins = true
+		else
+		    DeletingCoins = false
+		end
+	end
+)
+
+SectorConfig:Cheat(
+	"Toggle",
+	"Delete Hearts",
+	function(Value)
+		if Value then
+		    DeletingHearts = true
+		else
+		    DeletingHearts = false
+		end
+	end
+)
 
 CreditsSector:Cheat(
     "Label",
@@ -395,10 +424,19 @@ end)
 
 workspace.DescendantAdded:Connect(function(v)
 	wait(.075)
+	
 	if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
 		if v.CoinType.Value == "Heart" then
+		    if DeletingHearts then
+		        v:Destroy()
+		        return
+		    end
 			CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
 		elseif v.CoinType.Value == "Coin" and v.Coin:FindFirstChild("MainCoin") then
+		    if DeletingCoins then
+		        v:Destroy()
+		        return
+		    end
 			CreateESPPart(v.Coin["MainCoin"], Color3.fromRGB(239, 247, 72), v.CoinType)
 		end
 	end
