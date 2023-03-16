@@ -1,4 +1,4 @@
-wait(1)
+wait(10)
 
 if game.PlaceId ~= 142823291 then
     return
