@@ -13,6 +13,8 @@ local Player = Players.LocalPlayer
 local CollectiblesManager = Instance.new("StringValue", workspace)
 CollectiblesManager.Value = "None"
 
+local TouchFolder = Instance.new("Folder", workspace)
+
 local SavingBase = Instance.new("Part", workspace)
 SavingBase.Size = Vector3.new(30, 3, 30)
 SavingBase.Position = Vector3.new(490, -70, 2452)
@@ -162,11 +164,23 @@ SectorConfig:Cheat(
 		    
 		    for _, v in pairs(workspace:GetDescendants()) do
 		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Coin" then
-		            v:Destroy()
+		            local ObjValue = Instance.new("ObjectValue", v.TouchInterest)
+		            ObjValue.Name = "Coin"
+    		        ObjectValue.Value = v
+    		        
+    		        v.TouchInterest.Parent = TouchFolder
+    		        v.Coin.Transparency = 1
 		        end
 		    end
 		else
 		    DeletingCoins = false
+		    
+		    for _, v in pairs(TouchFolder:GetChildren()) do
+		        if v:FindFirstChild("Coin") then
+		            v.Parent = v.Coin.Value
+		            v.Coin:Destroy()
+		        end
+		    end
 		end
 	end
 )
@@ -180,11 +194,23 @@ SectorConfig:Cheat(
 		    
 		    for _, v in pairs(workspace:GetDescendants()) do
 		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Heart" then
-		            v:Destroy()
+		            local ObjValue = Instance.new("ObjectValue", v.TouchInterest)
+		            ObjValue.Name = "Heart"
+    		        ObjectValue.Value = v
+    		        
+    		        v.TouchInterest.Parent = TouchFolder
+    		        v.Coin.Transparency = 1
 		        end
 		    end
 		else
 		    DeletingHearts = false
+		    
+		    for _, v in pairs(TouchFolder:GetChildren()) do
+		        if v:FindFirstChild("Heart") then
+		            v.Parent = v.Heart.Value
+		            v.Heart:Destroy()
+		        end
+		    end
 		end
 	end
 )
@@ -438,13 +464,23 @@ workspace.DescendantAdded:Connect(function(v)
 	if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
 		if v.CoinType.Value == "Heart" then
 		    if DeletingHearts then
-		        v:Destroy()
+		        local ObjValue = Instance.new("ObjectValue", v.TouchInterest)
+		        ObjValue.Name = "Coin"
+		        ObjectValue.Value = v
+		        
+		        v.TouchInterest.Parent = TouchFolder
+		        v.Coin.Transparency = 1
 		        return
 		    end
 			CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
 		elseif v.CoinType.Value == "Coin" then
 		    if DeletingCoins then
-		        v:Destroy()
+		        local ObjValue = Instance.new("ObjectValue", v.TouchInterest)
+		        ObjValue.Name = "Heart"
+		        ObjectValue.Value = v
+		        
+		        v.TouchInterest.Parent = TouchFolder
+		        v.Coin.Transparency = 1
 		        return
 		    end
 			CreateESPPart(v.Coin["MainCoin"], Color3.fromRGB(239, 247, 72), v.CoinType)
