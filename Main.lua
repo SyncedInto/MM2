@@ -194,9 +194,7 @@ SectorConfig:Cheat(
 	"Toggle",
 	"Change FOV when running",
 	function(Value)
-		if Value then
             CanChangeFov = Value
-		end
 	end,
 	{enabled = true}
 )
