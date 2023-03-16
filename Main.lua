@@ -435,8 +435,6 @@ UserInputService.InputBegan:Connect(function(Input, Paused)
 end)
 
 workspace.DescendantAdded:Connect(function(v)
-	wait(.05)
-	
 	if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
 		if v.CoinType.Value == "Heart" then
 		    if DeletingHearts then
