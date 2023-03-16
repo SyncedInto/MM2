@@ -40,9 +40,10 @@ local Finity = loadstring(game:HttpGet("https://pastebin.com/raw/DMfEDWTE"))()
 local FinityWindow = Finity.new(true, "MM2 | Press RightControl", true)
 
 local KeyBind = FinityWindow:Category("Keybinds")
+local Configurations = FinityWindow:Category("Configurations")
 local Credits = FinityWindow:Category("Credits")
 local Sector = KeyBind:Sector("Keybinds")
-local SectorConfig = KeyBind:Sector("Configurations")
+local SectorConfig = Configurations:Sector("Configurations")
 local CreditsSector = Credits:Sector("Credits")
 
 local DeletingHearts = false
@@ -192,11 +193,21 @@ SectorConfig:Cheat(
 local CanChangeFov = true
 SectorConfig:Cheat(
 	"Toggle",
-	"Change FOV when running",
+	"Can change FOV when running",
 	function(Value)
             CanChangeFov = Value
 	end,
 	{enabled = true}
+)
+
+local CanChangeSpeedKnife = false
+SectorConfig:Cheat(
+	"Toggle",
+	"Can change speed while holding knife",
+	function(Value)
+            CanChangeSpeedKnife = Value
+	end,
+	{enabled = false}
 )
 
 CreditsSector:Cheat(
@@ -397,6 +408,7 @@ RunService.RenderStepped:Connect(function()
 			if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 				ChangeSpeed()
 				
+				print(CanChangeFov)
 				if CanChangeFov then
 				    workspace.CurrentCamera.FieldOfView = 80
 				end
@@ -481,12 +493,20 @@ end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Speed Up"] and not Paused then
+	    if not CanChangeSpeedKnife and Player.Character:FindFirstChild("Knife") then
+	        return
+	    end
+	    
 		Speed += 1
 	end
 end)
 
 UserInputService.InputEnded:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Speed Down"] and not Paused then
+	    if not CanChangeSpeedKnife and Player.Character:FindFirstChild("Knife") then
+	        return
+	    end
+	    
 		Speed -= 1
 	end
 end)
