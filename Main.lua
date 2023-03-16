@@ -42,6 +42,7 @@ local FinityWindow = Finity.new(true, "MM2 | Press RightControl", true)
 local KeyBind = FinityWindow:Category("Keybinds")
 local Credits = FinityWindow:Category("Credits")
 local Sector = KeyBind:Sector("Keybinds")
+local SectorConfig = KeyBind:Sector("Configurations")
 local CreditsSector = Credits:Sector("Credits")
 
 --
@@ -135,6 +136,17 @@ Sector:Cheat(
 	end,
 	{bind = Enum.KeyCode.RightControl}
 )
+
+SectorConfig:Cheat(
+	"Slider",
+	"Speed",
+	function(Value)
+		Speed = Value
+	end, {
+		min = 0,
+		max = 100,
+		suffix = " Speed"
+	})
 
 CreditsSector:Cheat(
     "Label",
