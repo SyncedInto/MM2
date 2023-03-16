@@ -37,7 +37,7 @@ local Keys = {
 }
 
 local Finity = loadstring(game:HttpGet("https://pastebin.com/raw/DMfEDWTE"))()
-local FinityWindow = Finity.new(true, "MM2", true)
+local FinityWindow = Finity.new(true, "MM2 | Press RightControl", true)
 
 local KeyBind = FinityWindow:Category("Keybinds")
 local Credits = FinityWindow:Category("Credits")
