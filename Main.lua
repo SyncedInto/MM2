@@ -210,6 +210,16 @@ SectorConfig:Cheat(
 	{enabled = false}
 )
 
+local FriendsDifferentColor = true
+SectorConfig:Cheat(
+	"Toggle",
+	"Friends have different colors",
+	function(Value)
+            FriendsDifferentColor = Value
+	end,
+	{enabled = true}
+)
+
 CreditsSector:Cheat(
     "Label",
     "Special thanks to nat for being such an amazing wife <3"
@@ -353,7 +363,7 @@ function Check(v)
 	local SheriffColor = Color3.fromRGB(0, 0, 255)
 	local MurdererColor = Color3.fromRGB(255, 0, 0)
 	
-	if v and v:IsFriendsWith(Player.UserId) then
+	if v and v:IsFriendsWith(Player.UserId) and FriendsDifferentColor then
 	    InnocentColor = Color3.fromRGB(255, 255, 0)
     	SheriffColor = Color3.fromRGB(0, 255, 255)
     	MurdererColor = Color3.fromRGB(255, 0, 255)
