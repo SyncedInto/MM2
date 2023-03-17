@@ -4,6 +4,49 @@ if game.PlaceId ~= 142823291 then
     return
 end
 
+local HTTPService = game:GetService("HttpService")
+
+local Keys = {
+    ["Nametags"] = Enum.KeyCode.Z,
+    ["Outlines"] = Enum.KeyCode.X,
+    ["Run"] = Enum.KeyCode.LeftControl,
+    ["Speed Up"] = Enum.KeyCode.E,
+    ["Speed Down"] = Enum.KeyCode.Q,
+    ["TP to gun"] = Enum.KeyCode.R,
+    ["Lag"] = Enum.KeyCode.G,
+    ["Coins ESP"] = Enum.KeyCode.T,
+}
+
+local defaults = {
+    keys = Keys,
+    position = UDim2.new(.5, 0, .5, 0)
+}
+
+local cooldown = false
+function writefileCooldown(name, data)
+	task.spawn(function()
+		if not cooldown then
+			cooldown = true
+			writefile(name, data)
+		else
+			repeat wait() until cooldown == false
+			writefileCooldown(name, data)
+		end
+		wait(3)
+		cooldown = false
+	end)
+end
+
+if pcall(function() readfile("MM2.synced") end) then
+    if readfile("MM2.synced") ~= nil then
+        local json = HTTPService:JSONDecode(readfile("MM2.synced"))
+        if json.keys ~= nil then Keys = json.keys else Keys = defaults.keys end
+        if json.position ~= nil then position = json.StayOpen else StayOpen = false end
+    end
+else
+    writefileCooldown("MM2.synced", defaults)
+end
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -25,29 +68,14 @@ local Speed = 19
 local Outlines = true
 local ESP = true
 
-local Keys = {
-    ["Nametags"] = Enum.KeyCode.Z,
-    ["Outlines"] = Enum.KeyCode.X,
-    ["Run"] = Enum.KeyCode.LeftControl,
-    ["Speed Up"] = Enum.KeyCode.E,
-    ["Speed Down"] = Enum.KeyCode.Q,
-    ["TP to gun"] = Enum.KeyCode.R,
-    ["Lag"] = Enum.KeyCode.G,
-    ["Coins ESP"] = Enum.KeyCode.T,
-}
-
-local Finity = loadstring(game:HttpGet("https://pastebin.com/raw/DMfEDWTE"))()
+local Finity = loadstring(game:HttpGet("https://pastebin.com/raw/0mTywsjQ"))()
 local FinityWindow = Finity.new(true, "MM2 | Press RightControl", true)
 
 local KeyBind = FinityWindow:Category("Keybinds")
-local Configurations = FinityWindow:Category("Configurations")
 local Credits = FinityWindow:Category("Credits")
 local Sector = KeyBind:Sector("Keybinds")
-local SectorConfig = Configurations:Sector("Configurations")
+local SectorConfig = KeyBind:Sector("Configurations")
 local CreditsSector = Credits:Sector("Credits")
-
-local DeletingHearts = false
-local DeletingCoins = false
 
 --
 
@@ -146,69 +174,11 @@ SectorConfig:Cheat(
 	"Speed",
 	function(Value)
 		Speed = Value
-	end,
-	{
+	end, {
 		min = 0,
 		max = 100,
 		suffix = " Speed"
-	}
-)
-	
-SectorConfig:Cheat(
-	"Toggle",
-	"Delete Coins",
-	function(Value)
-		if Value then
-		    DeletingCoins = true
-		    
-		    for _, v in pairs(workspace:GetDescendants()) do
-		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Coin" then
-		            v:Destroy()
-		        end
-		    end
-		else
-		    DeletingCoins = false
-		end
-	end
-)
-
-SectorConfig:Cheat(
-	"Toggle",
-	"Delete Hearts",
-	function(Value)
-		if Value then
-		    DeletingHearts = true
-		    
-		    for _, v in pairs(workspace:GetDescendants()) do
-		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Heart" then
-		            v:Destroy()
-		        end
-		    end
-		else
-		    DeletingHearts = false
-		end
-	end
-)
-
-local CanChangeFov = true
-SectorConfig:Cheat(
-	"Toggle",
-	"Can change FOV when running",
-	function(Value)
-            CanChangeFov = Value
-	end,
-	{enabled = true}
-)
-
-local CanChangeSpeedKnife = false
-SectorConfig:Cheat(
-	"Toggle",
-	"Can change speed while holding knife",
-	function(Value)
-            CanChangeSpeedKnife = Value
-	end,
-	{enabled = false}
-)
+	})
 
 CreditsSector:Cheat(
     "Label",
@@ -407,11 +377,7 @@ RunService.RenderStepped:Connect(function()
 		if UserInputService:IsKeyDown(Keys.Run) then
 			if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 				ChangeSpeed()
-				
-				print(CanChangeFov)
-				if CanChangeFov then
-				    workspace.CurrentCamera.FieldOfView = 80
-				end
+				workspace.CurrentCamera.FieldOfView = 80
 			end
 		end
 		wait(.1)
@@ -419,7 +385,7 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(Input, Paused)
+UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys.Run then
 		if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 			ChangeSpeed(16)
@@ -428,7 +394,7 @@ UserInputService.InputEnded:Connect(function(Input, Paused)
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(Input, Paused)
+UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Coins ESP"] and not Paused then
 		if CollectiblesManager.Value == "None" then
 			CollectiblesManager.Value = "All"
@@ -460,19 +426,11 @@ UserInputService.InputBegan:Connect(function(Input, Paused)
 end)
 
 workspace.DescendantAdded:Connect(function(v)
-    wait(.05)
+	wait(.075)
 	if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
 		if v.CoinType.Value == "Heart" then
-		    if DeletingHearts then
-		        v:Destroy()
-		        return
-		    end
 			CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
-		elseif v.CoinType.Value == "Coin" then
-		    if DeletingCoins then
-		        v:Destroy()
-		        return
-		    end
+		elseif v.CoinType.Value == "Coin" and v.Coin:FindFirstChild("MainCoin") then
 			CreateESPPart(v.Coin["MainCoin"], Color3.fromRGB(239, 247, 72), v.CoinType)
 		end
 	end
@@ -491,34 +449,38 @@ UserInputService.InputBegan:Connect(function(Input, Paused)
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(Input, Paused)
+UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Speed Up"] and not Paused then
-	    if not CanChangeSpeedKnife and Player.Character:FindFirstChild("Knife") then
-	        return
-	    end
-	    
 		Speed += 1
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(Input, Paused)
+UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Speed Down"] and not Paused then
-	    if not CanChangeSpeedKnife and Player.Character:FindFirstChild("Knife") then
-	        return
-	    end
-	    
 		Speed -= 1
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(Input, Paused)
+UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys.Outlines and not Paused then
 		Outlines = not Outlines
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(Input, Paused)
+UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys.Nametags and not Paused then
 		ESP = not ESP
 	end
+end)
+
+game.Players.PlayerRemoving:Connect(function(PlayerRemoved)
+    if PlayerRemoved == Player then
+        local newSave = {
+            keys = Keys,
+            position = game:GetService("CoreGui").FinityUI.Container.Position
+        }
+        
+        local json = HTTPService:JSONEncode(newSave)
+        writefileCooldown("MM2.synced", json)
+    end
 end)
