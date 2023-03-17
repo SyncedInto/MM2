@@ -80,15 +80,6 @@ Sector:Cheat(
 
 Sector:Cheat(
 	"Keybind",
-	"Speed",
-	function(NewValue)
-		Keys.Speed = NewValue
-	end,
-	{bind = Keys.Speed}
-)
-
-Sector:Cheat(
-	"Keybind",
 	"Speed Up",
 	function(NewValue)
 		Keys["Speed Up"] = NewValue
