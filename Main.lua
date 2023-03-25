@@ -1,12 +1,13 @@
 wait(10)
 
 if game.PlaceId ~= 142823291 then
-    return
+	return
 end
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local HTTPService = game:GetService("HttpService")
 
 local Player = Players.LocalPlayer
 
@@ -26,15 +27,54 @@ local Outlines = true
 local ESP = true
 
 local Keys = {
-    ["Nametags"] = Enum.KeyCode.Z,
-    ["Outlines"] = Enum.KeyCode.X,
-    ["Run"] = Enum.KeyCode.LeftControl,
-    ["Speed Up"] = Enum.KeyCode.E,
-    ["Speed Down"] = Enum.KeyCode.Q,
-    ["TP to gun"] = Enum.KeyCode.R,
-    ["Lag"] = Enum.KeyCode.G,
-    ["Coins ESP"] = Enum.KeyCode.T,
+	["Nametags"] = Enum.KeyCode.Z,
+	["Outlines"] = Enum.KeyCode.X,
+	["Run"] = Enum.KeyCode.LeftControl,
+	["Speed Up"] = Enum.KeyCode.E,
+	["Speed Down"] = Enum.KeyCode.Q,
+	["TP to gun"] = Enum.KeyCode.R,
+	["Lag"] = Enum.KeyCode.G,
+	["Coins ESP"] = Enum.KeyCode.T,
 }
+
+local Settings = {
+	["DeleteCoins"] = false,
+	["DeleteHearts"] = false,
+	["FOV"] = true,
+	["SpeedWhileKnife"] = false,
+	["Friends"] = true,
+	["Speed"] = Speed
+}
+
+if pcall(function() readfile("MM2.synced") end) then
+	pcall(function()
+		local json = HTTPService:JSONDecode(readfile("MM2.synced"))
+		if json.Keys then
+			Keys = json.Keys
+
+			for i, v in pairs(Keys) do
+				Keys[i] = Enum.KeyCode[v]
+			end
+		end
+		
+		if json.Settings then
+			Settings = json.Settings
+		end
+	end)
+else
+	local DKeys = Keys
+
+	for i, _ in pairs(Keys) do
+		DKeys[i] = Keys[i].Name
+	end
+	
+	local Save = {
+		["Keys"] = DKeys,
+		["Settings"] = Settings
+	}
+	
+	writefile("MM2.synced", HTTPService:JSONEncode(Save))
+end
 
 local Finity = loadstring(game:HttpGet("https://pastebin.com/raw/DMfEDWTE"))()
 local FinityWindow = Finity.new(true, "MM2 | Press RightControl", true)
@@ -144,41 +184,47 @@ SectorConfig:Cheat(
 		suffix = " Speed"
 	}
 )
-	
+
 SectorConfig:Cheat(
 	"Toggle",
 	"Delete Coins",
 	function(Value)
+		Settings["DeleteCoins"] = Value
+		
 		if Value then
-		    DeletingCoins = true
-		    
-		    for _, v in pairs(workspace:GetDescendants()) do
-		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Coin" then
-		            v:Destroy()
-		        end
-		    end
+			DeletingCoins = true
+
+			for _, v in pairs(workspace:GetDescendants()) do
+				if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Coin" then
+					v:Destroy()
+				end
+			end
 		else
-		    DeletingCoins = false
+			DeletingCoins = false
 		end
-	end
+	end,
+	{enabled = Settings.DeleteCoins}
 )
 
 SectorConfig:Cheat(
 	"Toggle",
 	"Delete Hearts",
 	function(Value)
+		Settings["DeleteHearts"] = Value
+		
 		if Value then
-		    DeletingHearts = true
-		    
-		    for _, v in pairs(workspace:GetDescendants()) do
-		        if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Heart" then
-		            v:Destroy()
-		        end
-		    end
+			DeletingHearts = true
+
+			for _, v in pairs(workspace:GetDescendants()) do
+				if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Heart" then
+					v:Destroy()
+				end
+			end
 		else
-		    DeletingHearts = false
+			DeletingHearts = false
 		end
-	end
+	end,
+	{enabled = Settings.DeleteHearts}
 )
 
 local CanChangeFov = true
@@ -186,9 +232,10 @@ SectorConfig:Cheat(
 	"Toggle",
 	"Can change FOV when running",
 	function(Value)
-            CanChangeFov = Value
+		Settings["FOV"] = Value
+		CanChangeFov = Value
 	end,
-	{enabled = true}
+	{enabled = Settings.FOV}
 )
 
 local CanChangeSpeedKnife = false
@@ -196,9 +243,10 @@ SectorConfig:Cheat(
 	"Toggle",
 	"Can change speed while holding knife",
 	function(Value)
-            CanChangeSpeedKnife = Value
+		Settings["SpeedWhileKnife"] = Value
+		CanChangeSpeedKnife = Value
 	end,
-	{enabled = false}
+	{enabled = Settings.SpeedWhileKnife}
 )
 
 local FriendsDifferentColor = true
@@ -206,14 +254,15 @@ SectorConfig:Cheat(
 	"Toggle",
 	"Friends have different colors",
 	function(Value)
-            FriendsDifferentColor = Value
+		Settings["Friends"] = Value
+		FriendsDifferentColor = Value
 	end,
-	{enabled = true}
+	{enabled = Settings.Friends}
 )
 
 CreditsSector:Cheat(
-    "Label",
-    "Special thanks to nat for being such an amazing wife <3"
+	"Label",
+	"Special thanks to nat for being such an amazing wife <3"
 )
 
 function CreateESPPart(BodyPart, color, CoinType)
@@ -271,19 +320,20 @@ end
 function Create(base, Color)
 	local bb
 	local Highlight
+	local parent
 
 	if not base:FindFirstChild("ESP") then
-	    if not base.Parent:FindFirstChild("Highlight") or not base:FindFirstChild("Highlight") then
-	        if base.Name == "GunDrop" then
-	            parent = base
-	        else
-	            parent = base.Parent
-	        end
-	        
-		    Highlight = Instance.new("Highlight", parent)
-		    Highlight.FillTransparency = 1
-		    Highlight.OutlineColor = Color
-		    
+		if not base.Parent:FindFirstChild("Highlight") or not base:FindFirstChild("Highlight") then
+			if base.Name == "GunDrop" then
+				parent = base
+			else
+				parent = base.Parent
+			end
+
+			Highlight = Instance.new("Highlight", parent)
+			Highlight.FillTransparency = 1
+			Highlight.OutlineColor = Color
+
 			bb = Instance.new("BillboardGui", base)
 			bb.Adornee = base
 			bb.ExtentsOffset = Vector3.new(0,1,0)
@@ -314,21 +364,21 @@ function Create(base, Color)
 	else
 		bb = base:FindFirstChild("ESP")
 		bb.TextLabel.TextColor3 = Color
-		
+
 		if base.Name == "GunDrop" then
-            Highlight = base:FindFirstChild("Highlight")
-        else
-            Highlight = base.Parent:FindFirstChild("Highlight")
-        end
-		
-		Highlight.OutlineColor = Color
-		
-		if Outlines then
-		    Highlight.OutlineTransparency = 0
+			Highlight = base:FindFirstChild("Highlight")
 		else
-		    Highlight.OutlineTransparency = 1
+			Highlight = base.Parent:FindFirstChild("Highlight")
 		end
-		
+
+		Highlight.OutlineColor = Color
+
+		if Outlines then
+			Highlight.OutlineTransparency = 0
+		else
+			Highlight.OutlineTransparency = 1
+		end
+
 		bb.Enabled = ESP
 	end
 end
@@ -349,38 +399,34 @@ function Check(v)
 		Create(v, Color3.fromRGB(255, 255, 0))
 		return
 	end
-	
+
 	local InnocentColor = Color3.fromRGB(0, 255, 0)
 	local SheriffColor = Color3.fromRGB(0, 0, 255)
 	local MurdererColor = Color3.fromRGB(255, 0, 0)
-	
+
 	if v and v:IsFriendsWith(Player.UserId) and FriendsDifferentColor then
-	    InnocentColor = Color3.fromRGB(255, 255, 0)
-    	SheriffColor = Color3.fromRGB(0, 255, 255)
-    	MurdererColor = Color3.fromRGB(255, 0, 255)
+		InnocentColor = Color3.fromRGB(255, 255, 0)
+		SheriffColor = Color3.fromRGB(0, 255, 255)
+		MurdererColor = Color3.fromRGB(255, 0, 255)
 	end
 
 	if v and v ~= Player and v.Backpack and v.Character and v.Character:FindFirstChild("Head") then
-		if v.Backpack and v.Character:FindFirstChildOfClass("Tool") then
-			if v.Backpack and v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
+		if v.Character:FindFirstChildOfClass("Tool") or v.Backpack:FindFirstChildOfClass("Tool") then
+			if v.Character:FindFirstChildOfClass("Tool") and v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
-			elseif v.Backpack and v.Character:FindFirstChildOfClass("Tool").Name == "Knife" then
+			elseif v.Character:FindFirstChildOfClass("Tool") and v.Character:FindFirstChildOfClass("Tool").Name == "Knife" then
 				Create(v.Character:FindFirstChild("Head"), MurdererColor)
 			end
-
-			if v.Backpack and not v.Character:FindFirstChild("Gun") and not v.Character:FindFirstChild("Knife") then
-				Create(v.Character:FindFirstChild("Head"), InnocentColor)
-			end
-		elseif v.Backpack and v.Backpack:FindFirstChildOfClass("Tool") then
-			if v.Backpack and v.Backpack:FindFirstChildOfClass("Tool").Name == "Gun" then
+			
+			if v.Backpack:FindFirstChildOfClass("Tool") and v.Backpack:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
-			elseif v.Backpack and v.Backpack:FindFirstChildOfClass("Tool").Name == "Knife" then
+			elseif v.Backpack:FindFirstChildOfClass("Tool") and v.Backpack:FindFirstChildOfClass("Tool").Name == "Knife" then
 				Create(v.Character:FindFirstChild("Head"), MurdererColor)
 			end
-
-			if v.Backpack and not v.Backpack:FindFirstChild("Gun") and not v.Backpack:FindFirstChild("Knife") then
-				Create(v.Character:FindFirstChild("Head"), InnocentColor)
-			end
+		end
+		
+		if not v.Character:FindFirstChild("Gun") and not v.Backpack:FindFirstChild("Gun") and not v.Character:FindFirstChild("Knife") and not v.Backpack:FindFirstChild("Knife") then
+			Create(v.Character:FindFirstChild("Head"), InnocentColor)
 		end
 	end
 end
@@ -395,9 +441,9 @@ RunService.Stepped:Connect(function()
 	if workspace:FindFirstChild("GunDrop") and Player.Character then --and Player.Backpack and not Player.Backpack:FindFirstChild("Get Gun") and not Player.Character:FindFirstChild("Get Gun") then
 		Check(workspace:FindFirstChild("GunDrop"), Color3.fromRGB(255, 255, 0))
 	end
-	
+
 	if Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-	    SavingBase.Position = Vector3.new(Player.Character.HumanoidRootPart.Position.X, -70, Player.Character.HumanoidRootPart.Position.Z)
+		SavingBase.Position = Vector3.new(Player.Character.HumanoidRootPart.Position.X, -70, Player.Character.HumanoidRootPart.Position.Z)
 	end
 end)
 
@@ -408,10 +454,10 @@ RunService.RenderStepped:Connect(function()
 		if UserInputService:IsKeyDown(Keys.Run) then
 			if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 				ChangeSpeed()
-				
+
 				print(CanChangeFov)
 				if CanChangeFov then
-				    workspace.CurrentCamera.FieldOfView = 80
+					workspace.CurrentCamera.FieldOfView = 80
 				end
 			end
 		end
@@ -420,7 +466,7 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
-UserInputService.InputEnded:Connect(function(Input, Paused)
+UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys.Run then
 		if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 			ChangeSpeed(16)
@@ -450,7 +496,7 @@ UserInputService.InputBegan:Connect(function(Input, Paused)
 
 		local OldPos = Player.Character.HumanoidRootPart.CFrame
 
-		Player.Character.HumanoidRootPart.CFrame = workspace:FindFirstChild("GunDrop").CFrame
+		Player.Character.HumanoidRootPart.CFrame = workspace:FindFirstChild("GunDrop").CFrame + OldPos.LookVector
 		wait(.05)
 		Player.Character.Humanoid:MoveTo(OldPos.Position)
 		wait(.23)
@@ -461,19 +507,19 @@ UserInputService.InputBegan:Connect(function(Input, Paused)
 end)
 
 workspace.DescendantAdded:Connect(function(v)
-    wait(.05)
+	wait(.05)
 	if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
 		if v.CoinType.Value == "Heart" then
-		    if DeletingHearts then
-		        v:Destroy()
-		        return
-		    end
+			if DeletingHearts then
+				v:Destroy()
+				return
+			end
 			CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
 		elseif v.CoinType.Value == "Coin" then
-		    if DeletingCoins then
-		        v:Destroy()
-		        return
-		    end
+			if DeletingCoins then
+				v:Destroy()
+				return
+			end
 			CreateESPPart(v.Coin["MainCoin"], Color3.fromRGB(239, 247, 72), v.CoinType)
 		end
 	end
@@ -494,20 +540,20 @@ end)
 
 UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Speed Up"] and not Paused then
-	    if not CanChangeSpeedKnife and Player.Character:FindFirstChild("Knife") then
-	        return
-	    end
-	    
+		if not CanChangeSpeedKnife and Player.Character:FindFirstChild("Knife") then
+			return
+		end
+
 		Speed += 1
 	end
 end)
 
 UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys["Speed Down"] and not Paused then
-	    if not CanChangeSpeedKnife and Player.Character:FindFirstChild("Knife") then
-	        return
-	    end
-	    
+		if not CanChangeSpeedKnife and Player.Character:FindFirstChild("Knife") then
+			return
+		end
+
 		Speed -= 1
 	end
 end)
@@ -521,5 +567,20 @@ end)
 UserInputService.InputBegan:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys.Nametags and not Paused then
 		ESP = not ESP
+	end
+end)
+
+Players.PlayerRemoving:Connect(function(Plr)
+	if Plr == Player then
+		for i, _ in pairs(Keys) do
+			Keys[i] = Keys[i].Name
+		end
+		
+		local Save = {
+			["Keys"] = Keys,
+			["Settings"] = Settings
+		}
+		
+		writefile("MM2.synced", HTTPService:JSONEncode(Save))
 	end
 end)
