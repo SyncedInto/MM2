@@ -505,7 +505,7 @@ UserInputService.InputBegan:Connect(function(Input, Paused)
 
 		local OldPos = Player.Character.HumanoidRootPart.CFrame
 
-		Player.Character.HumanoidRootPart.CFrame = workspace:FindFirstChild("GunDrop").CFrame + OldPos.LookVector
+		Player.Character.HumanoidRootPart.CFrame = workspace:FindFirstChild("GunDrop").CFrame
 		wait(.05)
 		Player.Character.Humanoid:MoveTo(OldPos.Position)
 		wait(.23)
