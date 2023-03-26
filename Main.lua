@@ -62,7 +62,16 @@ if pcall(function() readfile("MM2.synced") end) then
 		end
 	end)
 else
-	local DKeys = Keys
+	local DKeys = {
+		["Nametags"] = Enum.KeyCode.Z,
+		["Outlines"] = Enum.KeyCode.X,
+		["Run"] = Enum.KeyCode.LeftControl,
+		["Speed Up"] = Enum.KeyCode.E,
+		["Speed Down"] = Enum.KeyCode.Q,
+		["TP to gun"] = Enum.KeyCode.R,
+		["Lag"] = Enum.KeyCode.G,
+		["Coins ESP"] = Enum.KeyCode.T,
+	}
 
 	for i, _ in pairs(Keys) do
 		DKeys[i] = Keys[i].Name
