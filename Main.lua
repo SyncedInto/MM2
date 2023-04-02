@@ -475,7 +475,7 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
-UserInputService.InputBegan:Connect(function(Input, Paused)
+UserInputService.InputEnded:Connect(function(Input, Paused)
 	if Input.KeyCode == Keys.Run then
 		if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 			ChangeSpeed(16)
