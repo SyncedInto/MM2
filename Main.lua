@@ -217,7 +217,7 @@ SectorConfig:Cheat(
 
 SectorConfig:Cheat(
 	"Toggle",
-	"Delete Hearts",
+	"Delete Eggs",
 	function(Value)
 		Settings["DeleteHearts"] = Value
 		
@@ -225,7 +225,7 @@ SectorConfig:Cheat(
 			DeletingHearts = true
 
 			for _, v in pairs(workspace:GetDescendants()) do
-				if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Heart" then
+				if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") and v.CoinType.Value == "Egg" then
 					v:Destroy()
 				end
 			end
@@ -289,7 +289,7 @@ function CreateESPPart(BodyPart, color, CoinType)
 		elseif CollectiblesManager.Value == "All" then
 			Box.Transparency = .2
 		elseif CollectiblesManager.Value == "Hearts" then
-			if CoinType.Value == "Heart" then
+			if CoinType.Value == "Egg" then
 				Box.Transparency = .2
 			else
 				Box.Transparency = 1
@@ -310,7 +310,7 @@ function CreateESPPart(BodyPart, color, CoinType)
 			elseif CollectiblesManager.Value == "All" then
 				Box.Transparency = .2
 			elseif CollectiblesManager.Value == "Hearts" then
-				if CoinType.Value == "Heart" then
+				if CoinType.Value == "Egg" then
 					Box.Transparency = .2
 				else
 					Box.Transparency = 1
@@ -518,7 +518,7 @@ end)
 workspace.DescendantAdded:Connect(function(v)
 	wait(.05)
 	if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
-		if v.CoinType.Value == "Heart" then
+		if v.CoinType.Value == "Egg" then
 			if DeletingHearts then
 				v:Destroy()
 				return
