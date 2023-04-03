@@ -290,13 +290,13 @@ SectorConfig:Cheat(
             end
         end
 	end,
-	{text = "Murder"}
+	{text = "Reveal Murder"}
 )
 
 SectorConfig:Cheat(
 	"Button",
 	"Say who is Sheriff",
-	function(Value)
+	function()
 		if Sheriff then
     		local args = {
                 [1] = "The sheriff is: " .. Sheriff.Name,
@@ -310,7 +310,7 @@ SectorConfig:Cheat(
             end
         end
 	end,
-	{text = "Sheriff"}
+	{text = "Reveal Sheriff"}
 )
 
 CreditsSector:Cheat(
@@ -448,9 +448,6 @@ function ChangeSpeed(SpeedArg)
 end
 
 function Check(v)
-    local FoundMurder = false
-    local FoundSheriff = false
-    
 	if v and v.Name == "GunDrop" then
 		Create(v, Color3.fromRGB(255, 255, 0))
 		return
@@ -470,18 +467,18 @@ function Check(v)
 		if v.Character:FindFirstChildOfClass("Tool") or v.Backpack:FindFirstChildOfClass("Tool") then
 			if v.Character:FindFirstChildOfClass("Tool") and v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
-				FoundSheriff = true
+				Sheriff = v
 			elseif v.Character:FindFirstChildOfClass("Tool") and v.Character:FindFirstChildOfClass("Tool").Name == "Knife" then
 				Create(v.Character:FindFirstChild("Head"), MurdererColor)
-				FoundMurder = true
+				Murder = v
 			end
 			
 			if v.Backpack:FindFirstChildOfClass("Tool") and v.Backpack:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
-				FoundSheriff = true
+				Sheriff = v
 			elseif v.Backpack:FindFirstChildOfClass("Tool") and v.Backpack:FindFirstChildOfClass("Tool").Name == "Knife" then
 				Create(v.Character:FindFirstChild("Head"), MurdererColor)
-				FoundMurder = true
+				Murder = v
 			end
 		end
 		
@@ -489,12 +486,11 @@ function Check(v)
 			Create(v.Character:FindFirstChild("Head"), InnocentColor)
 		end
 	end
-	
-	if FoundMurder then Murder = v else Murder = nil end
-	if FoundSheriff then Sheriff = v else Sheriff = nil end
 end
 
 RunService.Stepped:Connect(function()
+    Murder = nil
+    Sheriff = nil
 	for _, v in pairs(Players:GetPlayers()) do
 		if v then
 			Check(v)
@@ -518,7 +514,6 @@ RunService.RenderStepped:Connect(function()
 			if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") then
 				ChangeSpeed()
 
-				print(CanChangeFov)
 				if CanChangeFov then
 					workspace.CurrentCamera.FieldOfView = 80
 				end
