@@ -8,6 +8,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local HTTPService = game:GetService("HttpService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Player = Players.LocalPlayer
 
@@ -97,6 +98,9 @@ local CreditsSector = Credits:Sector("Credits")
 
 local DeletingHearts = false
 local DeletingCoins = false
+
+local Murder
+local Sheriff
 
 --
 
@@ -269,6 +273,46 @@ SectorConfig:Cheat(
 	{enabled = Settings.Friends}
 )
 
+SectorConfig:Cheat(
+	"Button",
+	"Say who is Murder",
+	function()
+	    if Murder then
+    		local args = {
+                [1] = "The murderer is: " .. Murder.Name,
+                [2] = "normalchat"
+            }
+            
+            local Remote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+            
+            if Remote then
+                Remote:FireServer(unpack(args))
+            end
+        end
+	end,
+	{text = "Murder"}
+)
+
+SectorConfig:Cheat(
+	"Button",
+	"Say who is Sheriff",
+	function(Value)
+		if Sheriff then
+    		local args = {
+                [1] = "The sheriff is: " .. Sheriff.Name,
+                [2] = "normalchat"
+            }
+            
+            local Remote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+            
+            if Remote then
+                Remote:FireServer(unpack(args))
+            end
+        end
+	end,
+	{text = "Sheriff"}
+)
+
 CreditsSector:Cheat(
 	"Label",
 	"Special thanks to nat for being such an amazing wife <3"
@@ -404,6 +448,9 @@ function ChangeSpeed(SpeedArg)
 end
 
 function Check(v)
+    local FoundMurder = false
+    local FoundSheriff = false
+    
 	if v and v.Name == "GunDrop" then
 		Create(v, Color3.fromRGB(255, 255, 0))
 		return
@@ -423,14 +470,18 @@ function Check(v)
 		if v.Character:FindFirstChildOfClass("Tool") or v.Backpack:FindFirstChildOfClass("Tool") then
 			if v.Character:FindFirstChildOfClass("Tool") and v.Character:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
+				FoundSheriff = true
 			elseif v.Character:FindFirstChildOfClass("Tool") and v.Character:FindFirstChildOfClass("Tool").Name == "Knife" then
 				Create(v.Character:FindFirstChild("Head"), MurdererColor)
+				FoundMurder = true
 			end
 			
 			if v.Backpack:FindFirstChildOfClass("Tool") and v.Backpack:FindFirstChildOfClass("Tool").Name == "Gun" then
 				Create(v.Character:FindFirstChild("Head"), SheriffColor)
+				FoundSheriff = true
 			elseif v.Backpack:FindFirstChildOfClass("Tool") and v.Backpack:FindFirstChildOfClass("Tool").Name == "Knife" then
 				Create(v.Character:FindFirstChild("Head"), MurdererColor)
+				FoundMurder = true
 			end
 		end
 		
@@ -438,6 +489,9 @@ function Check(v)
 			Create(v.Character:FindFirstChild("Head"), InnocentColor)
 		end
 	end
+	
+	if FoundMurder then Murder = v else Murder = nil end
+	if FoundSheriff then Sheriff = v else Sheriff = nil end
 end
 
 RunService.Stepped:Connect(function()
