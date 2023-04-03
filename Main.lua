@@ -519,13 +519,13 @@ workspace.DescendantAdded:Connect(function(v)
 	wait(.05)
 	if v.Name == "Coin_Server" and v:FindFirstChild("CoinType") and v:FindFirstChild("Coin") then
 		if v.CoinType.Value == "Egg" then
-			if DeletingHearts then
+			if Settings.DeleteHearts then
 				v:Destroy()
 				return
 			end
 			CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
 		elseif v.CoinType.Value == "Coin" then
-			if DeletingCoins then
+			if Settings.DeleteCoins then
 				v:Destroy()
 				return
 			end
