@@ -572,7 +572,12 @@ workspace.DescendantAdded:Connect(function(v)
 				v:Destroy()
 				return
 			end
-			CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
+			
+			if v.Coin.MeshId ~= "rbxassetid://12956802293" then
+			    CreateESPPart(v.Coin, Color3.fromRGB(252, 152, 3), v.CoinType)
+			else
+			    CreateESPPart(v.Coin, Color3.fromRGB(250, 85, 162), v.CoinType)
+			end
 		elseif v.CoinType.Value == "Coin" then
 			if Settings.DeleteCoins then
 				v:Destroy()
